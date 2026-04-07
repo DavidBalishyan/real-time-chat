@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My-CHAT-App</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- LEFT PANEL -->
+      <div class="login-header">
+        <div class="branding">
+          <h1>My CHAT App</h1>
+          <p>Connect with people. Join conversations. Be social.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="login-main">
+        <form id="enter-chat" action="chat.html">
+          <h2>Welcome Back</h2>
+
+          <div class="form-control">
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+          <div class="form-control">
+            <label>Password</label>
+            <input
+              type="text"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <div class="form-control">
+            <label>Room</label>
+            <select name="room" id="room">
+              <option value="Music">🎵 Music</option>
+              <option value="Books">📚 Books</option>
+              <option value="Movies">🎬 Movies</option>
+              <option value="Games">🎮 Games</option>
+              <option value="Sport">⚽ Sport</option>
+              <option value="Art">🎨 Art</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn">Enter Chat</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

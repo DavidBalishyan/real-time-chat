@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My-CHAT-App</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="chat-container">
+      <!-- SIDEBAR -->
+      <aside class="chat-sidebar">
+        <h2 class="room-title">Room</h2>
+
+        <div class="room-list" id="rooms"></div>
+
+        <h3>Users</h3>
+        <ul id="users"></ul>
+      </aside>
+
+      <!-- MAIN CHAT -->
+      <div class="chat-main">
+        <!-- TOP BAR -->
+        <header class="chat-header">
+          <h2 id="room-name">Chat Room</h2>
+          <a href="index.html" class="btn">Leave</a>
+        </header>
+
+        <!-- MESSAGES -->
+        <div class="chat-messages" id="messages"></div>
+
+        <!-- INPUT -->
+        <div class="chat-form-container">
+          <form id="chat-form">
+            <input
+              id="msg"
+              type="text"
+              placeholder="Type a message..."
+              required
+              autocomplete="off"
+            />
+            <button class="btn">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="js/main.js"></script>
+  </body>
+</html>

@@ -4,42 +4,99 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My-CHAT-App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div class="chat-container">
       <!-- SIDEBAR -->
       <aside class="chat-sidebar">
-        <h2 class="room-title">Room</h2>
+        <div class="sidebar-brand">
+          <svg class="sidebar-logo" viewBox="0 0 32 32" fill="none">
+            <rect x="2" y="4" width="28" height="20" rx="4" stroke="#d79921" stroke-width="2"/>
+            <circle cx="10" cy="14" r="2.5" fill="#d79921"/>
+            <circle cx="16" cy="14" r="2.5" fill="#d79921"/>
+            <circle cx="22" cy="14" r="2.5" fill="#d79921"/>
+            <path d="M12 24 L16 28 L20 24" stroke="#d79921" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sidebar-title">CHAT</span>
+        </div>
 
-        <div class="room-list" id="rooms"></div>
+        <div class="sidebar-section">
+          <h2 class="section-label"><span class="section-marker">▸</span> Rooms</h2>
+          <div class="room-list" id="rooms"></div>
+        </div>
 
-        <h3>Users</h3>
-        <ul id="users"></ul>
+        <div class="sidebar-section">
+          <h3 class="section-label"><span class="section-marker">▸</span> Online</h3>
+          <ul id="users"></ul>
+        </div>
       </aside>
 
       <!-- MAIN CHAT -->
       <div class="chat-main">
         <!-- TOP BAR -->
         <header class="chat-header">
-          <h2 id="room-name">Chat Room</h2>
-          <a href="index.html" class="btn">Leave</a>
+          <div class="header-left">
+            <span class="header-hash">#</span>
+            <h2 id="room-name">Chat Room</h2>
+            <span class="header-status">
+              <span class="status-dot"></span>
+              connected
+            </span>
+          </div>
+          <a href="index.html" class="btn btn-leave">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+            </svg>
+            Leave
+          </a>
         </header>
 
         <!-- MESSAGES -->
         <div class="chat-messages" id="messages"></div>
 
+        <!-- TYPING INDICATOR -->
+        <div class="typing-indicator" id="typing-indicator"></div>
+
         <!-- INPUT -->
         <div class="chat-form-container">
+          <!-- Formatting toolbar -->
+          <div class="fmt-toolbar">
+            <button type="button" class="fmt-btn" data-wrap="**" title="Bold"><b>B</b></button>
+            <button type="button" class="fmt-btn" data-wrap="_" title="Italic"><i>I</i></button>
+            <button type="button" class="fmt-btn" data-wrap="~~" title="Strikethrough" style="text-decoration:line-through">S</button>
+            <button type="button" class="fmt-btn" data-wrap="`" title="Code"><span class="fmt-code">{ }</span></button>
+            <span class="fmt-divider"></span>
+            <button type="button" class="fmt-btn fmt-emoji-btn" id="emoji-toggle-btn" title="Emoji">😊</button>
+          </div>
+
+          <!-- Emoji picker panel -->
+          <div class="emoji-panel" id="emoji-panel">
+            <div class="emoji-search-wrap">
+              <input type="text" id="emoji-search" placeholder="Search emoji..." autocomplete="off" />
+            </div>
+            <div class="emoji-categories" id="emoji-categories"></div>
+            <div class="emoji-grid" id="emoji-grid"></div>
+          </div>
+
           <form id="chat-form">
-            <input
+            <span class="input-prompt">›</span>
+            <textarea
               id="msg"
-              type="text"
-              placeholder="Type a message..."
+              placeholder="Type a message... (supports bold, italic, strikethrough, code)"
               required
               autocomplete="off"
-            />
-            <button class="btn">Send</button>
+              rows="1"
+            ></textarea>
+            <button class="btn btn-send">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+              </svg>
+              Send
+            </button>
           </form>
         </div>
       </div>

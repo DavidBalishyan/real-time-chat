@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My-CHAT-App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
@@ -11,39 +14,58 @@
       <!-- LEFT PANEL -->
       <div class="login-header">
         <div class="branding">
+          <div class="logo-icon">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="8" width="52" height="38" rx="8" fill="#d79921" opacity="0.15"/>
+              <rect x="4" y="8" width="52" height="38" rx="8" stroke="#d79921" stroke-width="2.5"/>
+              <circle cx="20" cy="27" r="4" fill="#d79921"/>
+              <circle cx="30" cy="27" r="4" fill="#d79921"/>
+              <circle cx="40" cy="27" r="4" fill="#d79921"/>
+              <path d="M22 46 L30 54 L38 46" stroke="#d79921" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <h1>My CHAT App</h1>
           <p>Connect with people. Join conversations. Be social.</p>
+          <div class="terminal-line">
+            <span class="prompt">$</span>
+            <span class="cmd">chat --join</span>
+            <span class="cursor">▊</span>
+          </div>
         </div>
       </div>
 
       <!-- RIGHT PANEL -->
       <div class="login-main">
         <form id="enter-chat" action="chat.html">
-          <h2>Welcome Back</h2>
+          <div class="form-title">
+            <span class="bracket">[</span>
+            <h2>Welcome Back</h2>
+            <span class="bracket">]</span>
+          </div>
 
           <div class="form-control">
-            <label>Username</label>
+            <label><span class="label-prefix">//</span> Username</label>
             <input
               type="text"
               name="username"
               id="username"
-              placeholder="Enter your username"
+              placeholder="your_username"
               required
             />
           </div>
           <div class="form-control">
-            <label>Password</label>
+            <label><span class="label-prefix">//</span> Password</label>
             <input
-              type="text"
+              type="password"
               name="password"
               id="password"
-              placeholder="Enter your password"
+              placeholder="••••••••"
               required
             />
           </div>
 
           <div class="form-control">
-            <label>Room</label>
+            <label><span class="label-prefix">//</span> Room</label>
             <select name="room" id="room">
               <option value="Music">🎵 Music</option>
               <option value="Books">📚 Books</option>
@@ -54,7 +76,12 @@
             </select>
           </div>
 
-          <button type="submit" class="btn">Enter Chat</button>
+          <button type="submit" class="btn">
+            <span>Enter Chat</span>
+            <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
         </form>
       </div>
     </div>

@@ -1,9 +1,40 @@
-// ── Parse query params ──────────────────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
-const username = params.get("username") || "Anonymous";
 const room = params.get("room") || "General";
+const tokenFromUrl = params.get("token");
+const storedToken = localStorage.getItem("chatToken");
+const storedUsername = localStorage.getItem("chatUsername");
+const token = tokenFromUrl || storedToken;
+let username = storedUsername || "Anonymous";
 
-// ── DOM refs ────────────────────────────────────────────────────────────────
+function decodeJwtPayload(token) {
+	try {
+		const payload = token.split(".")[1];
+		const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+		const jsonPayload = decodeURIComponent(atob(base64).split("").map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(""));
+		return JSON.parse(jsonPayload);
+	} catch {
+		return null;
+	}
+}
+
+if (!token) {
+	window.location.href = "index.html";
+}
+
+const jwtPayload = token ? decodeJwtPayload(token) : null;
+if (jwtPayload?.sub) {
+	username = jwtPayload.sub;
+}
+
+if (!token || !username) {
+	window.location.href = "index.html";
+}
+
+if (tokenFromUrl) {
+	localStorage.setItem("chatToken", token);
+	localStorage.setItem("chatUsername", username);
+}
+
 const messagesEl = document.getElementById("messages");
 const chatForm = document.getElementById("chat-form");
 const msgInput = document.getElementById("msg");
@@ -19,7 +50,6 @@ const emojiCategories = document.getElementById("emoji-categories");
 
 roomNameEl.textContent = room;
 
-// ── Gruvbox per-user colors ──────────────────────────────────────────────────
 const GRUVBOX_COLORS = ["#fabd2f", "#83a598", "#8ec07c", "#d3869b", "#fe8019", "#b8bb26", "#fb4934", "#ebdbb2"];
 const userColorMap = {};
 let colorIndex = 0;
@@ -28,7 +58,6 @@ function getUserColor(name) {
 	return userColorMap[name];
 }
 
-// ── Emoji data ───────────────────────────────────────────────────────────────
 const EMOJI_CATEGORIES = [
 	{
 		label: "😊 Smileys", id: "smileys", emojis: [
@@ -176,7 +205,6 @@ document.addEventListener("click", (e) => {
 	}
 });
 
-// ── Formatting toolbar ───────────────────────────────────────────────────────
 document.querySelectorAll(".fmt-btn[data-wrap]").forEach(btn => {
 	btn.addEventListener("click", () => {
 		const wrap = btn.dataset.wrap;
@@ -191,7 +219,6 @@ document.querySelectorAll(".fmt-btn[data-wrap]").forEach(btn => {
 	});
 });
 
-// ── Markdown renderer ────────────────────────────────────────────────────────
 function renderMarkdown(raw) {
 	let s = escapeHtml(raw);
 	s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
@@ -202,23 +229,30 @@ function renderMarkdown(raw) {
 	return s;
 }
 
-// ── Room list ────────────────────────────────────────────────────────────────
-const ROOMS = [
-	{ name: "Music", emoji: "🎵" }, { name: "Books", emoji: "📚" }, { name: "Movies", emoji: "🎬" },
-	{ name: "Games", emoji: "🎮" }, { name: "Sport", emoji: "⚽" }, { name: "Art", emoji: "🎨" },
-];
-ROOMS.forEach(({ name, emoji }) => {
-	const div = document.createElement("div");
-	div.textContent = `${emoji} ${name}`;
-	div.classList.toggle("active-room", name === room);
-	div.addEventListener("click", () => {
-		window.location.href = `chat.html?username=${encodeURIComponent(username)}&room=${encodeURIComponent(name)}`;
-	});
-	roomsEl.appendChild(div);
-});
+async function loadRoomsSidebar() {
+	try {
+		const response = await fetch("/auth/rooms");
+		if (!response.ok) throw new Error("Failed to fetch rooms");
+		const data = await response.json();
+		roomsEl.innerHTML = "";
+		data.rooms.forEach(({ name }) => {
+			const div = document.createElement("div");
+			div.textContent = name;
+			div.classList.toggle("active-room", name === room);
+			div.addEventListener("click", () => {
+				window.location.href = `chat.html?room=${encodeURIComponent(name)}`;
+			});
+			roomsEl.appendChild(div);
+		});
+	} catch (error) {
+		console.error("Could not load rooms sidebar:", error);
+	}
+}
 
-// ── WebSocket ────────────────────────────────────────────────────────────────
-const wsUrl = `ws://${location.host}?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
+loadRoomsSidebar();
+
+const protocol = location.protocol === "https:" ? "wss" : "ws";
+const wsUrl = `${protocol}://${location.host}?token=${encodeURIComponent(token)}&room=${encodeURIComponent(room)}`;
 const ws = new WebSocket(wsUrl);
 
 ws.addEventListener("open", () => console.log("WebSocket connected"));

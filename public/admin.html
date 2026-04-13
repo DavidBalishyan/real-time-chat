@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Real-time Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- SIDEBAR -->
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <svg class="sidebar-logo" viewBox="0 0 32 32" fill="none">
+            <rect x="2" y="4" width="28" height="20" rx="4" stroke="#d79921" stroke-width="2"/>
+            <circle cx="10" cy="14" r="2.5" fill="#d79921"/>
+            <circle cx="16" cy="14" r="2.5" fill="#d79921"/>
+            <circle cx="22" cy="14" r="2.5" fill="#d79921"/>
+            <path d="M12 24 L16 28 L20 24" stroke="#d79921" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sidebar-title">ADMIN</span>
+        </div>
+
+        <div class="admin-nav">
+          <button class="nav-btn active" data-section="users">
+            <span class="nav-icon">👥</span>
+            <span>Users</span>
+          </button>
+          <button class="nav-btn" data-section="rooms">
+            <span class="nav-icon">🏠</span>
+            <span>Rooms</span>
+          </button>
+          <button class="nav-btn" data-section="system">
+            <span class="nav-icon">⚙️</span>
+            <span>System</span>
+          </button>
+        </div>
+
+        <div class="admin-actions">
+          <a href="index.html" class="btn btn-secondary">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+            </svg>
+            Back to Login
+          </a>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="admin-main">
+        <!-- HEADER -->
+        <header class="admin-header">
+          <h1>Admin Panel</h1>
+          <div id="admin-status" class="admin-status">
+          </div>
+        </header>
+
+        <!-- CONTENT AREA -->
+        <div class="admin-content">
+          <!-- USERS SECTION -->
+          <section id="users-section" class="admin-section active">
+            <div class="section-header">
+              <h2>Registered Users</h2>
+              <button class="btn btn-primary" id="create-user-btn">Create User</button>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number" id="total-users">0</div>
+                <div class="stat-label">Total Users</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="online-users">0</div>
+                <div class="stat-label">Online Now</div>
+              </div>
+            </div>
+            <div class="data-table">
+              <table id="users-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Status</th>
+                    <th>Room</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-tbody">
+                  <!-- Users will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ROOMS SECTION -->
+          <section id="rooms-section" class="admin-section">
+            <div class="section-header">
+              <h2>Active Rooms</h2>
+              <button class="btn btn-primary" id="create-room-btn">Create Room</button>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number" id="total-rooms">0</div>
+                <div class="stat-label">Active Rooms</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="total-connections">0</div>
+                <div class="stat-label">Total Connections</div>
+              </div>
+            </div>
+            <div id="rooms-list" class="rooms-grid">
+              <!-- Rooms will be populated here -->
+            </div>
+          </section>
+
+          <!-- SYSTEM SECTION -->
+          <section id="system-section" class="admin-section">
+            <h2>System Information</h2>
+            <div class="system-info">
+              <div class="info-card">
+                <h3>Server Status</h3>
+                <div class="info-content">
+                  <p><strong>Status:</strong> <span id="server-status">Unknown</span></p>
+                  <p><strong>Uptime:</strong> <span id="server-uptime">Unknown</span></p>
+                  <p><strong>Port:</strong> <span id="server-port">5000</span></p>
+                </div>
+              </div>
+              <div class="info-card">
+                <h3>Redis Status</h3>
+                <div class="info-content">
+                  <p><strong>Status:</strong> <span id="redis-status">Unknown</span></p>
+                  <p><strong>Keys:</strong> <span id="redis-keys">0</span></p>
+                  <p><strong>Memory:</strong> <span id="redis-memory">Unknown</span></p>
+                </div>
+              </div>
+              <div class="info-card">
+                <h3>WebSocket Stats</h3>
+                <div class="info-content">
+                  <p><strong>Active Connections:</strong> <span id="ws-connections">0</span></p>
+                  <p><strong>Messages Today:</strong> <span id="ws-messages">0</span></p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- User Modal -->
+    <div id="user-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="user-modal-title">Create User</h3>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="user-form">
+          <div class="form-group">
+            <label for="user-username">Username</label>
+            <input type="text" id="user-username" required minlength="2" maxlength="24">
+          </div>
+          <div class="form-group">
+            <label for="user-password">Password</label>
+            <input type="password" id="user-password" minlength="6" placeholder="Leave empty to keep current password on edit">
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('user-modal')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Room Modal -->
+    <div id="room-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="room-modal-title">Create Room</h3>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="room-form">
+          <div class="form-group">
+            <label for="room-name">Room Name</label>
+            <input type="text" id="room-name" required minlength="1" maxlength="50">
+          </div>
+          <div class="form-group">
+            <label for="room-description">Description (optional)</label>
+            <textarea id="room-description" rows="3" maxlength="200"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('room-modal')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+  </body>
+</html>

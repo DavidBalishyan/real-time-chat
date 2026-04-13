@@ -34,7 +34,12 @@ export interface ChatMessage {
 	time: string;
 }
 
-export type OutboundMessage = JoinedMessage | UserJoinedMessage | UserLeftMessage | ChatMessage;
+export interface TypingMessage {
+	type: "typing";
+	username: string;
+}
+
+export type OutboundMessage = JoinedMessage | UserJoinedMessage | UserLeftMessage | ChatMessage | TypingMessage;
 
 // Inbound
 export interface InboundChatMessage {
@@ -42,4 +47,8 @@ export interface InboundChatMessage {
 	message: string;
 }
 
-export type InboundMessage = InboundChatMessage;
+export interface InboundTypingMessage {
+	type: "typing";
+}
+
+export type InboundMessage = InboundChatMessage | InboundTypingMessage;

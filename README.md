@@ -90,6 +90,7 @@ A real time chat app for a workshop at TUMO center Armenia.
 | `REDIS_URL` | Redis connection URL | `redis://localhost:6379` |
 | `JWT_SECRET` | Secret key for JWT signing | Required |
 | `PORT` | Server port | `5000` |
+| `ADMIN_PASSWORD` | The password of the `Admin` user | `admin123` |
 
 ## Redis Management
 

@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv"
 dotenv.config();
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 const server = createServer(app);
 createWebSocketServer(server);
@@ -19,7 +19,7 @@ async function initializeAdmin() {
 			const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 			const hashedPassword = await bcrypt.hash(adminPassword, 12);
 			await createUser("Admin", hashedPassword);
-			console.log("Admin user created with password: admin123");
+			console.log(`Admin user created with password: ${adminPassword}`);
 		}
 	} catch (error) {
 		console.error("Failed to initialize admin user:", error);

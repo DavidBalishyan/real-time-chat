@@ -23,7 +23,7 @@ async function loadRooms() {
 		});
 	} catch (error) {
 		console.error("Could not load rooms:", error);
-		// Fallback — keep whatever static options exist in the HTML
+		// Fallback - keep whatever static options exist in the HTML
 	}
 }
 

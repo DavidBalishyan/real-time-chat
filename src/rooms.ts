@@ -1,6 +1,12 @@
 import { WebSocket } from "ws";
 import type { UserInfo, OutboundMessage } from "./types.js";
-import { getAllRooms as getAllRoomsFromRedis, createRoom as createRoomInRedis, updateRoom as updateRoomInRedis, deleteRoom as deleteRoomInRedis } from "./auth/redis.js";
+import {
+	getAllRooms as getAllRoomsFromRedis,
+	createRoom as createRoomInRedis,
+	updateRoom as updateRoomInRedis,
+	deleteRoom as deleteRoomInRedis,
+	deleteRoomMessages,
+} from "./auth/redis.js";
 
 const rooms = new Map<string, Map<WebSocket, UserInfo>>();
 
@@ -48,11 +54,12 @@ export async function updateRoom(name: string, description: string): Promise<voi
 
 export async function deleteRoom(name: string): Promise<void> {
 	await deleteRoomInRedis(name);
+	await deleteRoomMessages(name);
 	if (rooms.has(name)) {
 		broadcastAll(name, {
 			type: "system_message",
 			message: "This room has been deleted by an administrator.",
-			time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+			time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
 		} as any);
 		for (const [ws] of rooms.get(name)!) {
 			ws.close(1000, "Room deleted by administrator");
@@ -61,21 +68,14 @@ export async function deleteRoom(name: string): Promise<void> {
 	}
 }
 
-export async function getAllRoomInfo(): Promise<Array<{name: string, description: string, createdBy: string, createdAt: string, userCount: number, users: string[]}>> {
+export async function getAllRoomInfo(): Promise<Array<{
+	name: string; description: string; createdBy: string; createdAt: string; userCount: number; users: string[]
+}>> {
 	const redisRooms = await getAllRoomsFromRedis();
 	const roomInfo = [];
-
-	for (const redisRoom of redisRooms) {
-		const activeUsers = getRoomUsers(redisRoom.name);
-		roomInfo.push({
-			name: redisRoom.name,
-			description: redisRoom.description,
-			createdBy: redisRoom.createdBy,
-			createdAt: redisRoom.createdAt,
-			userCount: activeUsers.length,
-			users: activeUsers
-		});
+	for (const r of redisRooms) {
+		const activeUsers = getRoomUsers(r.name);
+		roomInfo.push({ name: r.name, description: r.description, createdBy: r.createdBy, createdAt: r.createdAt, userCount: activeUsers.length, users: activeUsers });
 	}
-
 	return roomInfo;
 }

@@ -1,5 +1,5 @@
-import express, { Request, Response, NextFunction } from "express";
-import type { Express } from "express";
+import express from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import authRouter from "./auth/routes.js";
 
 const app: Express = express();
